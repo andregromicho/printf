@@ -10,47 +10,49 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int check_type(char format, va_list args);
+#include "ft_printf.h"
+
+int check_type(char str, va_list args)
 {
     int count;
 
     count = 0;
-    if (format == 'c')
-        count += ft_putchar(va_arg(args, int));
-    else if (format == 's')
-        count += ft_putstr(va_arg(args, char *));
-    else if (format == 'p')
-        count += ft_putptr(va_arg(args, void *));
-    else if (format == 'd' || format == 'i')
-        count += ft_putnbr(va_arg(args, int));
-    else if (format == 'u')
-        count += ft_putunbr(va_arg(args, unsigned int));
-    else if (format == 'x' || format == 'X')
-        count += ft_puthex(va_arg(args, unsigned int), format);
-    else if (format == '%')
+    if (str == 'c')
+        count += ft_print_char(va_arg(args, int));
+    else if (str == 's')
+        count += ft_print_str(va_arg(args, char *));
+    else if (str == 'p')
+        count += ft_print_ptr(va_arg(args, void *));
+    else if (str == 'd' || str == 'i')
+        count += ft_print_nbr(va_arg(args, int));
+    else if (str == 'u')
+        count += ft_print_unbr(va_arg(args, unsigned int));
+    else if (str == 'x' || str == 'X')
+        count += ft_print_hex(va_arg(args, unsigned int), str);
+    else if (str == '%')
         count += ft_putchar('%');
     return (count);
 }
 
-int ft_printf(const char *format, ...)
+int ft_printf(const char *str, ...)
 {
-    int count;
-    int i;
+    int     count;
+    int     i;
     va_list args;
 
     count = 0;
     i = 0;
-    va_start(args, format);
-    while (format[i])
+    va_start(args, str);
+    while  str[i])
     {
-        if (format[i] == '%')
+        if (str[i] == '%')
         {
             i++;
-            count += check_type(format[i], args);
+            count += check_type (str[i], args);
         }
         else
-            count += ft_putchar(format[i]);
-        i++;
+            count += ft_putchar (str[i]);
+            i++;
     }
     va_end(args);
     return (count);
