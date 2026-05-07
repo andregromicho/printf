@@ -12,48 +12,79 @@
 
 #include "ft_printf.h"
 
-int check_type(char str, va_list args)
+int	ft_check_type(char type, va_list args)
 {
-    int count;
+	int	count;
 
-    count = 0;
-    if (str == 'c')
-        count += ft_print_char(va_arg(args, int));
-    else if (str == 's')
-        count += ft_print_str(va_arg(args, char *));
-    else if (str == 'p')
-        count += ft_print_ptr(va_arg(args, void *));
-    else if (str == 'd' || str == 'i')
-        count += ft_print_nbr(va_arg(args, int));
-    else if (str == 'u')
-        count += ft_print_unbr(va_arg(args, unsigned int));
-    else if (str == 'x' || str == 'X')
-        count += ft_print_hex(va_arg(args, unsigned int), str);
-    else if (str == '%')
-        count += ft_putchar('%');
-    return (count);
+	count = 0;
+	if (type == 'c')
+		count += ft_print_char(va_arg(args, int));
+	else if (type == 's')
+		count += ft_print_str(va_arg(args, char *));
+	else if (type == 'p')
+		count += ft_print_ptr(va_arg(args, void *));
+	else if (type == 'd' || type == 'i')
+		count += ft_print_nbr(va_arg(args, int));
+	else if (type == 'u')
+		count += ft_print_unbr(va_arg(args, unsigned int));
+	else if (type == 'x' || type == 'X')
+		count += ft_print_hex(va_arg(args, unsigned int), type);
+	else if (type == '%')
+		count += ft_print_char('%');
+	return (count);
 }
 
-int ft_printf(const char *str, ...)
+int	ft_printf(const char *str, ...)
 {
-    int     count;
-    int     i;
-    va_list args;
+	int		count;
+	int		i;
+	va_list	args;
 
-    count = 0;
-    i = 0;
-    va_start(args, str);
-    while  str[i])
-    {
-        if (str[i] == '%')
-        {
-            i++;
-            count += check_type (str[i], args);
-        }
-        else
-            count += ft_putchar (str[i]);
-            i++;
-    }
-    va_end(args);
-    return (count);
+	count = 0;
+	i = 0;
+	va_start(args, str);
+	while (str[i])
+	{
+		if (str[i] == '%')
+		{
+			count += ft_check_type (str[i + 1], args);
+			i += 2;
+		}
+		else
+		{
+			count += ft_print_char(str[i]);
+			i++;
+		}
+	}
+	va_end(args);
+	return (count);
 }
+
+/* #include <stdio.h>
+
+int	main()
+{
+
+	char *s = "Hello, World!";
+	int d = 42;
+	unsigned int u = 3000000000;
+	void *p = s;
+	unsigned int x = 305441741;
+	unsigned int X = 305441741;
+	void *ptr = NULL;
+	char *null_str = NULL;
+
+	ft_printf("String: %s\n", s);
+	ft_printf("Decimal: %d\n", d);
+	ft_printf("Unsigned: %u\n", u);
+	ft_printf("Pointer: %p\n", p);
+	ft_printf("Hex (lowercase): %x\n", x);
+	ft_printf("Hex (uppercase): %X\n", X);
+	ft_printf("Percent sign: %%\n");
+	ft_printf("Null pointer: %p\n", ptr);
+	printf("Expected output:%p\n", ptr);
+	ft_printf("Null string: %s\n", null_str);
+	printf("Expected output:%s\n", null_str);
+
+	return (0);
+} */
