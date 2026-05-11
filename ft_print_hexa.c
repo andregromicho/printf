@@ -12,29 +12,45 @@
 
 #include "ft_printf.h"
 
-int	ft_print_hex(unsigned long n, char format)
+int	ft_print_hex(unsigned long n, char type)
 {
 	int	count;
+	int	check;
 
 	count = 0;
 	if (n >= 16)
-		count += ft_print_hex(n / 16, format);
-	if (format == 'x')
-		count += ft_print_char("0123456789abcdef"[n % 16]);
+	{
+		check = ft_print_hex(n / 16, type);
+		if (check == -1)
+			return (-1);
+		count += check;
+	}
+	if (type == 'x')
+		check = ft_print_char("0123456789abcdef"[n % 16]);
 	else
-		count += ft_print_char("0123456789ABCDEF"[n % 16]);
+		check = ft_print_char("0123456789ABCDEF"[n % 16]);
+	if (check == -1)
+		return (-1);
+	count += check;
 	return (count);
 }
 
 int	ft_print_ptr(void *ptr)
 {
 	int	count;
+	int	check;
 
 	if (!ptr)
 		return (ft_print_str("(nil)"));
 	count = 0;
-	count += ft_print_str("0x");
-	count += ft_print_hex((unsigned long)ptr, 'x');
+	check = ft_print_str("0x");
+	if (check == -1)
+		return (-1);
+	count += check;
+	check = ft_print_hex((unsigned long)ptr, 'x');
+	if (check == -1)
+		return (-1);
+	count += check;
 	return (count);
 }
 

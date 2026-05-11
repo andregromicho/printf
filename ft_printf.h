@@ -20,7 +20,7 @@ int	ft_print_char(char c);
 int	ft_print_str(char *str);
 int	ft_print_nbr(int n);
 int	ft_print_unbr(unsigned int n);
-int	ft_print_hex(unsigned long n, char format);
+int	ft_print_hex(unsigned long n, char type);
 int	ft_print_ptr(void *ptr);
 int	ft_printf(const char *str, ...);
 int	ft_check_type(char type, va_list args);

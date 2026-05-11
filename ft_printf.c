@@ -18,19 +18,19 @@ int	ft_check_type(char type, va_list args)
 
 	count = 0;
 	if (type == 'c')
-		count += ft_print_char(va_arg(args, int));
+		count = ft_print_char(va_arg(args, int));
 	else if (type == 's')
-		count += ft_print_str(va_arg(args, char *));
+		count = ft_print_str(va_arg(args, char *));
 	else if (type == 'p')
-		count += ft_print_ptr(va_arg(args, void *));
+		count = ft_print_ptr(va_arg(args, void *));
 	else if (type == 'd' || type == 'i')
-		count += ft_print_nbr(va_arg(args, int));
+		count = ft_print_nbr(va_arg(args, int));
 	else if (type == 'u')
-		count += ft_print_unbr(va_arg(args, unsigned int));
+		count = ft_print_unbr(va_arg(args, unsigned int));
 	else if (type == 'x' || type == 'X')
-		count += ft_print_hex(va_arg(args, unsigned int), type);
+		count = ft_print_hex(va_arg(args, unsigned int), type);
 	else if (type == '%')
-		count += ft_print_char('%');
+		count = ft_print_char('%');
 	return (count);
 }
 
@@ -38,6 +38,7 @@ int	ft_printf(const char *str, ...)
 {
 	int		count;
 	int		i;
+	int		check;
 	va_list	args;
 
 	count = 0;
@@ -45,16 +46,16 @@ int	ft_printf(const char *str, ...)
 	va_start(args, str);
 	while (str[i])
 	{
-		if (str[i] == '%')
-		{
-			count += ft_check_type (str[i + 1], args);
-			i += 2;
-		}
+		if (str[i] == '%' && str[i + 1] != 0)
+			check = ft_check_type (str[i++ + 1], args);
+		else if (str[i] != '%')
+			check = ft_print_char(str[i]);
 		else
-		{
-			count += ft_print_char(str[i]);
-			i++;
-		}
+			check = 0;
+		if (check == -1)
+			return (va_end(args), -1);
+		count += check;
+		i++;
 	}
 	va_end(args);
 	return (count);
@@ -85,6 +86,7 @@ int	main()
 	printf("Expected output:%p\n", ptr);
 	ft_printf("Null string: %s\n", null_str);
 	printf("Expected output:%s\n", null_str);
-
+	ft_printf("hello %");
+	ft_printf("");
 	return (0);
 } */
